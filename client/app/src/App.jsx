@@ -62,31 +62,78 @@ function App() {
   
   
   
-  return(
-    <>
-      <h1>Sustainability Tracker</h1>
+  return (
+  <div className="page">
+    <div className="container">
+      {/* Title */}
+      <h1 className="title">Sustainability Tracker</h1>
 
-      <div>
-        <input type = "text" placeholder = "Sustainability Action (ex. Recycling)..." onChange ={(e) => setActionName(e.target.value)}/>
-        <input type="date" onChange ={(e) => setDate(e.target.value)}/>
-        <input type = "number" placeholder = "Points Awarded..." onChange ={(e) => setPoints(e.target.value)}/>
-        <button onClick ={addAction}> Add Sustinability Action </button>
-      </div>
-      
-      {actions.map((action) => (     /*each individual action in actions useState will be dispalyed*/
-        <div>
-          <p>ID: {action.id}</p>
-          <p>Action Name: {action.action}</p>
-          <p>Date: {action.date} </p>
-          <p>Points: {action.points}</p>
-          <button onClick={() => deleteAction(action.id)}>Delete</button>
-      
+      {/* Form */}
+      <div className="formCard">
+        <div className="formGrid">
+          <input
+            className="input"
+            type="text"
+            placeholder="Action (e.g., Recycling)"
+            onChange={(e) => setActionName(e.target.value)}
+          />
+
+          <input
+            className="input"
+            type="date"
+            onChange={(e) => setDate(e.target.value)}
+          />
+
+          <input
+            className="input"
+            type="number"
+            placeholder="Points"
+            onChange={(e) => setPoints(e.target.value)}
+          />
+
+          <button className="primaryButton" onClick={addAction}>
+            Add Action
+          </button>
         </div>
-      ))}
-    
-    
-    </>
-  );
+      </div>
+
+      {/* Table */}
+      <div className="tableCard">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Action</th>
+              <th>Date</th>
+              <th>Points</th>
+              <th>Adjust</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {actions.map((action) => (
+              <tr key={action.id}>
+                <td>{action.id}</td>
+                <td>{action.action}</td>
+                <td>{action.date}</td>
+                <td>{action.points}</td>
+                <td>
+                  <button
+                    className="dangerButton"
+                    onClick={() => deleteAction(action.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+);
+
 
   
   

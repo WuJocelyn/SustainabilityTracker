@@ -1,42 +1,188 @@
-#root {
-  max-width: 1280px;
+/* ============================= */
+/* GLOBAL RESET & FONT */
+/* ============================= */
+
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f5f7fb;
+  color: #111827;
+}
+
+/* ============================= */
+/* PAGE LAYOUT */
+/* ============================= */
+
+.page {
+  min-height: 100vh;
+  padding: 40px 16px;
+}
+
+.container {
+  max-width: 900px;
   margin: 0 auto;
-  padding: 2rem;
+}
+
+/* ============================= */
+/* TITLE */
+/* ============================= */
+
+.title {
   text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 28px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* ============================= */
+/* FORM */
+/* ============================= */
+
+.formCard {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 36px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.formGrid {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1fr auto;
+  gap: 14px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .formGrid {
+    grid-template-columns: 1fr;
   }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.input {
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
 }
 
-.card {
-  padding: 2em;
+.input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
 }
 
-.read-the-docs {
-  color: #888;
+/* ============================= */
+/* BUTTONS */
+/* ============================= */
+
+/* Add Action */
+.primaryButton {
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 14px;
+  border: 1px solid #c7ddff;
+  background: #edf4ff;
+  color: #2563eb;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.primaryButton:hover {
+  background: #e0ecff;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.15);
+}
+
+/* Delete */
+.dangerButton {
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 14px;
+  border: 1px solid #fecaca;
+  background: #fff1f2;
+  color: #dc2626;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dangerButton:hover {
+  background: #ffe4e6;
+  box-shadow: 0 6px 14px rgba(220, 38, 38, 0.15);
+}
+
+/* ============================= */
+/* TABLE */
+/* ============================= */
+
+.tableCard {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Header */
+.table thead th {
+  text-align: center;
+  padding: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #2856b1;
+  background: #f9fafb;
+
+  border-bottom: 1px solid #c0c3ca;
+  border-right: 1px solid #c0c3ca;
+}
+
+.table thead th:last-child {
+  border-right: none;
+}
+
+/* Body */
+.table tbody td {
+  text-align: left;
+  padding: 16px;
+  font-size: 14px;
+  color: #111827;
+
+  border-bottom: 1px solid #cfd2d8;
+  border-right: 1px solid #c0c3ca;
+}
+
+.table tbody td:last-child {
+  border-right: none;
+}
+
+/* Hover */
+.table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #dce6f7;
+}
+
+/* Empty state */
+.empty {
+  text-align: center;
+  color: #6b7280;
+  padding: 20px;
 }
