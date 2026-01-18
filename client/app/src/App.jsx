@@ -3,6 +3,10 @@ import "./App.css";
 
 function App() {
   const [actions, setActions] = useState([]);
+  const [actionName, setActionName] = useState("");
+  const [date, setDate] = useState("")
+  const [points, setPoints] = useState(0);
+
    
   useEffect(() => {   /*When page renders, will automatically fetch actions*/
     fetchActions();
@@ -20,9 +24,41 @@ function App() {
     }
   };
 
+
   
+  const addAction = async () => {
+    const actionData = {
+      action: actionName,
+      date: date,
+      points: points,
+    };
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/actions/create/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(actionData),
+      });
+
+      const data = await response.json();
+      setActions((prev) => [...prev, data]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   
-  
+  const deleteAction = async (pk) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/actions/${pk}/`, {
+        method: "DELETE",
+      });
+
+      setActions((prev) => prev.filter((action) => action.id !== pk));
+    } catch (err) {
+      console.log(err);
+    }
+  };
   
   
   
@@ -31,10 +67,10 @@ function App() {
       <h1>Sustainability Tracker</h1>
 
       <div>
-        <input type = "text" placeholder = "Sustainability Action (ex. Recycling)..."/>
-        <input type="date"/>
-        <input type = "number" placeholder = "Points Awarded..."/>
-        <button> Add Sustinability Action </button>
+        <input type = "text" placeholder = "Sustainability Action (ex. Recycling)..." onChange ={(e) => setActionName(e.target.value)}/>
+        <input type="date" onChange ={(e) => setDate(e.target.value)}/>
+        <input type = "number" placeholder = "Points Awarded..." onChange ={(e) => setPoints(e.target.value)}/>
+        <button onClick ={addAction}> Add Sustinability Action </button>
       </div>
       
       {actions.map((action) => (     /*each individual action in actions useState will be dispalyed*/
@@ -43,7 +79,8 @@ function App() {
           <p>Action Name: {action.action}</p>
           <p>Date: {action.date} </p>
           <p>Points: {action.points}</p>
-          
+          <button onClick={() => deleteAction(action.id)}>Delete</button>
+      
         </div>
       ))}
     
