@@ -13,7 +13,7 @@ import "./App.css";
  *  - Create new actions (POST)
  *  - Edit existing actions (PUT)
  *  - Delete actions (DELETE)
- *  - Fetch aggregated points timeseries for a Plotly chart (GET w/ query params)
+ *  - Fetch aggregated points timeseries for a Plotly line chart (GET w/ query params)
  */
 
 
@@ -46,8 +46,8 @@ function App() {
   const [startDate, setStartDate] = useState(""); // "YYYY-MM-DD" // Optional chart filter range (sent as query params if provided)
   const [endDate, setEndDate] = useState("");     // "YYYY-MM-DD"
   
-const [series, setSeries] = useState([]); // backend returns [{period, total_points}, ...] 
-// Example: [{ period: "2026-01-01", total_points: 40 }, ...]
+  const [series, setSeries] = useState([]); // backend returns [{period, total_points}, ...] 
+  // Example: [{ period: "2026-01-01", total_points: 40 }, ...]
 
  
   const [loadingSeries, setLoadingSeries] = useState(false);  // UI feedback for chart request
@@ -184,7 +184,7 @@ const [series, setSeries] = useState([]); // backend returns [{period, total_poi
 
     try {
       // Axios "params" becomes query string parameters (?group=...&start=...&end=...)
-      const res = await axios.get(`http://127.0.0.1:8000/api/actions/points-timeseries/`, { 
+      const res = await axios.get(`http://127.0.0.1:8000/api/actions/points_timeseries/`, { 
         params: {
           group,          // day/month/year
           start: startDate || undefined,
@@ -272,7 +272,7 @@ const [series, setSeries] = useState([]); // backend returns [{period, total_poi
 
         {seriesError && <div className="error">{seriesError}</div>}
 
-        {/* Only show chart if we have data */}
+        {/* Only show line chart if we have data */}
         {series.length > 0 ? (
           <Plot
             data={[
