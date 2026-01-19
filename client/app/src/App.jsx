@@ -139,6 +139,14 @@ function App() {
 
 
   /**
+   * Cancel edit
+   */
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditForm({ action: "", date: "", points: "" });
+  };
+
+  /**
    * PUT /api/actions/<id>/
    * Save edited values for the row currently in edit mode.
    *
