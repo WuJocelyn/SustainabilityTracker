@@ -6,21 +6,31 @@ A full-stack web application for tracking sustainability actions using a Django 
 
 ## Project Objective
 
-The goal of this project is to build a RESTful API using Django and Django REST Framework to manage sustainability actions. The API supports creating, retrieving, updating, and deleting actions. A React frontend is used to interact with the API and display the data dynamically.
+The goal of this project is to build a RESTful API using Django and Django REST Framework to manage sustainability actions. The API supports creating, retrieving, updating, and deleting actions. A React frontend is used to interact with the API and display the data.
 
 ---
 
-## Features
+## Core Features: CRUD operations
 
-- Create sustainability actions with a date and point value
-- View all actions in a table
-- Edit existing actions inline
-- Delete actions instantly
-- RESTful API with JSON responses
-- Interactive time-series chart of total points
-- Group data by day, month, or year
-- Optional date range filtering
-- Frontend communicates with backend using Axios
+- Create, view, edit, and delete sustainability actions
+- Display all actions in an interactive table with inline editing option
+- RESTful Django API that returns structured JSON responses
+- React frontend integrates with the backend using Axios for data fetching and updates
+
+<img src="AppImage.png" width="900" />
+
+## Additional Features: Interactive Point Visualization 
+Beyond the core CRUD requirements, I focused on how users might interact with this application over time and what features would help them stay motivated in making sustainable choices. From personal experience, being able to see progress visually plays a key role in building and maintaining habits. Therefore, I wanted to build a progress-tracking feature that allows users to reflect on their efforts.
+
+
+
+### Interactive Points Line Chart
+To support this, I implemented an interactive line chart that visualizes sustainability points over time. Key capabilities include being able to: 
+- Custom Date Ranges: Users can select a start and end date to focus on specific periods
+- Flexible time aggregation: View total points grouped by day, month, or year, depending on the level of detail the user wants
+- Interactive: Built using Plotly
+
+<img src="PointsTracker.png" width="900" />
 
 ---
 
@@ -43,9 +53,7 @@ More details in the Prerequisites section below
 | DELETE | `/api/actions/<id>/` | Delete an action |
 | GET | `/api/actions/points-timeseries/` | Retrieve total points over a given time period (by day, month, or year) |
 
----
-
-## Sample POST Payload
+### Sample POST Payload
 
 ```json
 {
@@ -54,7 +62,7 @@ More details in the Prerequisites section below
   "points": 25
 }
 ```
-
+---
 
 ## Prerequisites
 
@@ -149,35 +157,14 @@ http://localhost:5173/
 ```
 
 ---
-
-## Using the Application
-
-Once both the backend and frontend servers are running, you can use the application as follows:
-
-- Enter a sustainability action (e.g., Recycling)
-- Select a date
-- Assign a point value
-- Click Add Action
-- View all actions in the table
-- Edit actions inline using Edit
-- Remove actions using Delete
-
-### Chart Interaction
-
-The chart allows you to:
-
-- Group data by day, month, or year
-- Apply optional date range filtering
-- Visualize total sustainability points over time
+## Testing
+- Backend Testing: API endpoints were tested using Postman
+- Frontend Testing: functionality was tested manually in the browser
 
 ---
+### Sample Images
 
-## Testing
 
-### Backend Testing
 
-- API endpoints were tested using Postman
 
-### Frontend Testing
 
-- Frontend functionality was tested manually in the browser
