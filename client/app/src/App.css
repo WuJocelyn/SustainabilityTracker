@@ -186,3 +186,99 @@ body {
   color: #6b7280;
   padding: 20px;
 }
+
+
+/* ============================= */
+/* CHART CARD (HABIT TRACKER) */
+/* ============================= */
+
+.chartCard {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 28px;      /* space above chart */
+  margin-bottom: 36px;   /* space below chart */
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+}
+
+.chartHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.chartTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Controls row */
+.chartControls {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+/* Label + input stacked, matching your form vibe */
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #374151;
+}
+
+.select {
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  background: white;
+  font-size: 14px;
+  color: #111827;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+/* "Apply" + "Clear" buttons for the chart */
+.secondaryButton {
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 14px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.secondaryButton:hover {
+  background: #f3f4f6;
+  box-shadow: 0 6px 14px rgba(17, 24, 39, 0.08);
+}
+
+/* Small message under the chart when no data yet */
+.chartEmpty {
+  text-align: center;
+  color: #6b7280;
+  padding: 16px;
+  background: #f9fafb;
+  border: 1px dashed #d1d5db;
+  border-radius: 12px;
+}
+
