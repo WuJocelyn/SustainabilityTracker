@@ -161,8 +161,7 @@ http://localhost:5173/
 - Backend Testing: API endpoints were tested using Postman
 - Frontend Testing: functionality was tested manually in the browser
 
----
-### Sample Images
+
 
 
 
