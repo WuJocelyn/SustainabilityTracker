@@ -5,6 +5,7 @@ from rest_framework import status
 from datetime import datetime
 from django.db.models import Sum
 from django.db.models.functions import TruncDay, TruncMonth, TruncYear
+from django.shortcuts import render
 
 
 from .models import Action
@@ -170,3 +171,7 @@ def points_timeseries(request):
         out.append({"period": label, "total_points": row["total_points"] or 0})
 
     return Response(out, status=status.HTTP_200_OK)  # Return aggregated series for Plotly chart
+
+# Home screen for the backend SustainabilityTracker server
+def home(request):
+    return render(request, "home.html")
