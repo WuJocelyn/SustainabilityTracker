@@ -3,43 +3,72 @@ import Plot from "react-plotly.js";
 import axios from "axios";
 import "./App.css";
 
-const API_BASE = "http://127.0.0.1:8000/api";
+
+/**
+ * App.jsx
+ * -------
+ * Main React component for the Sustainability Tracker.
+ * Responsibilities:
+ *  - Fetch existing actions from the Django API (GET)
+ *  - Create new actions (POST)
+ *  - Edit existing actions (PUT)
+ *  - Delete actions (DELETE)
+ *  - Fetch aggregated points timeseries for a Plotly chart (GET w/ query params)
+ */
+
 
 function App() {
+  
+  // List of actions currently displayed in the table
   const [actions, setActions] = useState([]);
-  const [actionName, setActionName] = useState("");
+
+
+   // "Add Action" form fields
+  const [actionName, setActionName] = useState(""); 
   const [date, setDate] = useState("")
   const [points, setPoints] = useState(0);
 
-  //for PUT/EDIT state 
-  const [editingId, setEditingId] = useState(null);
-  const [editForm, setEditForm] = useState({
+  // Edit (PUT) state 
+  const [editingId, setEditingId] = useState(null);  // If not null, we are editing the row with this id
+  const [editForm, setEditForm] = useState({ // Holds the values in the "edit mode" inputs (separate from create form)
     action: "",
     date: "",
     points: "",
   });
 
+  // Line Chart - Chart controls + chart data
+  // Controls how backend aggregates points: day/month/year
 
-  // ------- chart UI state -------
-  const [group, setGroup] = useState("day"); // "day" | "month" | "year"
-  const [startDate, setStartDate] = useState(""); // "YYYY-MM-DD"
+  
+  const [group, setGroup] = useState("day"); // either "day", "month", "year"
+
+  
+  const [startDate, setStartDate] = useState(""); // "YYYY-MM-DD" // Optional chart filter range (sent as query params if provided)
   const [endDate, setEndDate] = useState("");     // "YYYY-MM-DD"
-  const [series, setSeries] = useState([]); // backend returns [{period, total_points}, ...]
+  
+const [series, setSeries] = useState([]); // backend returns [{period, total_points}, ...] 
+// Example: [{ period: "2026-01-01", total_points: 40 }, ...]
 
-  const [loadingSeries, setLoadingSeries] = useState(false);
+ 
+  const [loadingSeries, setLoadingSeries] = useState(false);  // UI feedback for chart request
   const [seriesError, setSeriesError] = useState("");
 
 
    
-  useEffect(() => {   /*When page renders, will automatically fetch actions*/
+  useEffect(() => {   // On first render, will automatically fetch actions
     fetchActions();
   }, []);
   
+   /**
+   * GET /api/actions/
+   * Fetch all sustainability actions and store them in state.
+   */
+
   const fetchActions = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/actions/"); /* wait for backend to return data*/
-      const data = response.data; 
-      setActions(data);
+      const response = await axios.get("http://127.0.0.1:8000/api/actions/");  // axios.get returns a response object: { data, status, headers, ... }
+      const data = response.data; // response.data is the JSON payload returned by your API
+      setActions(data); // Update UI state so React re-renders the table
     } 
     
     catch (err) {
@@ -47,76 +76,94 @@ function App() {
     }
   };
 
-
+   /**
+   * POST /api/actions/create/
+   * Create a new action based on current form inputs,
+   * then append it to the actions list for immediate UI update.
+   */
   
   const addAction = async () => {
-    const actionData = {
+    const actionData = {  // Build the JSON body expected by your backend
       action: actionName,
       date: date,
       points: points,
     };
-    try {
-      const response = await axios.post("http://127.0.0.1:8000/api/actions/create/", actionData, {
+    try {  
+      const response = await axios.post("http://127.0.0.1:8000/api/actions/create/", actionData, {   // Send JSON to backend (Axios automatically JSON-stringifies objects)
         headers: {
           "Content-Type": "application/json",
         },
       });
 
-      const data = response.data;
-      setActions((prev) => [...prev, data]);
+      const data = response.data;  // Newly created object returned by backend (often includes id)
+      setActions((prev) => [...prev, data]); // prev is the current actions array; append the new action
     } catch (err) {
       console.log(err);
     }
   };
   
+   /**
+   * DELETE /api/actions/<id>/
+   * Delete the given action on the backend and remove it from UI state.
+   *
+   * @param {number} pk - primary key / id of the action to delete
+   */
   const deleteAction = async (pk) => {
     try {
-      const response = await axios.delete(`http://127.0.0.1:8000/api/actions/${pk}/`, {
+      const response = await axios.delete(`http://127.0.0.1:8000/api/actions/${pk}/`, { // DELETE request to backend
         headers: {
           "Content-Type": "application/json",
         },
       });
 
-      setActions((prev) => prev.filter((action) => action.id !== pk));
+      setActions((prev) => prev.filter((action) => action.id !== pk)); // Remove deleted item from UI list without refetching everything
     } catch (err) {
       console.log(err);
     }
   };
   
-  // ENTER edit mode and preload inputs
-  const startEdit = (actionObj) => {
+  /**
+   * Enter "edit mode" for a single row and preload the edit inputs.
+   *
+   * @param {object} actionObj - the action row object being edited
+   */
+
+  const startEdit = (actionObj) => {  // Set which row is currently in edit mode
     setEditingId(actionObj.id);
-    setEditForm({
+    setEditForm({           // Pre-fill the edit form with existing values so user can modify them
       action: actionObj.action,
       date: actionObj.date,
       points: actionObj.points,
     });
   };
 
-  const cancelEdit = () => {
-    setEditingId(null);
-    setEditForm({ action: "", date: "", points: "" });
-  };
 
-  // PUT update (action/date/points)
+  /**
+   * PUT /api/actions/<id>/
+   * Save edited values for the row currently in edit mode.
+   *
+   * @param {number} pk - primary key / id of the action to update
+   */
+
+  
   const updateAction = async (pk) => {
-    const actionData = {
+    const actionData = {   // Build payload from editForm state
       action: editForm.action,
       date: editForm.date,
-      points: Number(editForm.points),
+      points: Number(editForm.points), // Ensure points is numeric (inputs often return strings)
     };
 
     try {
-      const response = await axios.put(`http://127.0.0.1:8000/api/actions/${pk}/`, actionData, {
+      const response = await axios.put(`http://127.0.0.1:8000/api/actions/${pk}/`, actionData, {   // Send update to backend
         headers: {
           "Content-Type": "application/json",
         },
       });
 
-      const data = response.data;
+      const data = response.data;  // Updated object returned by backend
 
-      // update UI immediately (tutorial style)
-      setActions((prev) =>
+
+      setActions((prev) =>  // map over previous array and replace only the edited item
         prev.map((a) => (a.id === pk ? data : a))
       );
 
@@ -126,13 +173,18 @@ function App() {
     }
   };
 
+  /**
+   * GET /api/actions/points-timeseries/?group=day|month|year&start=YYYY-MM-DD&end=YYYY-MM-DD
+   * Pull aggregated totals for the Plotly chart based on current filters.
+   */
 
   const fetchPointsTimeseries = async () => {
-    setLoadingSeries(true);
+    setLoadingSeries(true); 
     setSeriesError("");
 
     try {
-      const res = await axios.get(`${API_BASE}/actions/points-timeseries/`, {
+      // Axios "params" becomes query string parameters (?group=...&start=...&end=...)
+      const res = await axios.get(`http://127.0.0.1:8000/api/actions/points-timeseries/`, { 
         params: {
           group,          // day/month/year
           start: startDate || undefined,
@@ -140,16 +192,20 @@ function App() {
         },
       });
 
-      setSeries(res.data);
-    } catch (err) {
+      setSeries(res.data); // Store series for chart rendering
+    } 
+    
+    catch (err) {
       console.log(err);
       setSeriesError("Could not load chart data. Check your endpoint and query params.");
-    } finally {
+    } 
+    
+    finally {
       setLoadingSeries(false);
     }
   };
 
-  // Convert backend series to Plotly arrays
+  // Convert backend series (array of objects) into Plotly x/y arrays
   const x = series.map((r) => r.period);
   const y = series.map((r) => r.total_points);
   
@@ -161,7 +217,7 @@ function App() {
         {/* Title */}
         <h1 className="title">Sustainability Tracker</h1>
     
-        {/* ---------------- Chart Section ---------------- */}
+      {/* Line Chart */}
       <div className="chartCard">
         <div className="chartHeader">
           <h2>Points Habit Tracker</h2>
@@ -238,7 +294,6 @@ function App() {
               xaxis: {
                 title: group === "month" ? "Month" : group === "year" ? "Year" : "Date",
                 tickangle: -45,
-                // nice UX for day mode
                 rangeslider: group === "day" ? { visible: true } : undefined,
               },
               yaxis: { title: "Total Points" },
@@ -361,7 +416,6 @@ function App() {
                           Save
                         </button>
 
-                        {/* If you don't have secondaryButton in CSS, change to primaryButton */}
                         <button className="secondaryButton" onClick={cancelEdit}>
                           Cancel
                         </button>
