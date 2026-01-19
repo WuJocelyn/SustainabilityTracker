@@ -156,13 +156,13 @@ The frontend application will be available at:
 http://localhost:5173/
 ```
 
+
 ---
 ## Testing
 - Backend Testing: API endpoints were tested using Postman
 - Frontend Testing: functionality was tested manually in the browser
 
----
-### Sample Images
+
 
 
 
